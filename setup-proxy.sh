@@ -101,7 +101,7 @@ if [ ! -d $NGX_PAGESPEED_DIR ]; then
 fi
 if [ ! -d $NGINX_DIR ]; then
   wget -nv $NGINX_DOWNLOAD
-  tar -xvzf nginx-$NGINX_VERSION.tar.gz
+  tar -xzf nginx-$NGINX_VERSION.tar.gz
 fi
 cd $NGINX_DIR
 MOD_PAGESPEED_DIR="$WORK_DIR/mod_pagespeed/src" ./configure --add-module=$NGX_PAGESPEED_DIR
