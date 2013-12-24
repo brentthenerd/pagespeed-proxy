@@ -10,6 +10,11 @@ NGX_PAGESPEED_VERSION=1.7.30.1-beta
 NGX_PAGESPEED_DOWNLOAD=https://github.com/pagespeed/ngx_pagespeed/archive/v$NGX_PAGESPEED_VERSION.zip
 NGX_PAGESPEED_DIR=$WORK_DIR/ngx_pagespeed-$NGX_PAGESPEED_VERSION
 
+GIT_VERSION=1.8.5.2
+GIT_TARBALL=git-$GIT_VERSION.tar.gz
+GIT_DOWNLOAD=https://www.kernel.org/pub/software/scm/git/$GIT_TARBALL
+GIT_DIR=$WORK_DIR/git
+
 echo "Updating packages..."
 if type apt-get >/dev/null 2>&1; then
   sudo apt-get -y update && sudo apt-get -y upgrade
@@ -21,6 +26,41 @@ if type yum >/dev/null 2>&1; then
   sudo yum -y update && sudo yum -y upgrade
   sudo yum -y install gcc-c++ pcre-dev pcre-devel zlib-devel make
   sudo yum -y install httpd python subversion gperf rpm-build git
+fi
+
+INSTALL_GIT=0
+if [ -d $GIT_DIR ]; then
+  export PATH=$GIT_DIR/bin:$PATH
+fi
+if type git >/dev/null 2>&1; then
+  if git --version | grep '1\.8'; then
+    echo "Git is found."
+  else
+    echo "Git needs to be version 1.8."
+    INSTALL_GIT=1
+  fi
+else
+  echo "Git is not found."
+  INSTALL_GIT=1
+fi
+
+if [ $INSTALL_GIT -eq 1 ]; then
+  echo "Compiling Git $GIT_VERSION from source..."
+  if type yum >/dev/null 2>&1; then
+    sudo yum -y install curl-devel perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker
+  fi
+  wget -nv $GIT_DOWNLOAD
+  tar -xf $GIT_TARBALL
+  rm $GIT_TARBALL
+  cd git-$GIT_VERSION
+  ./configure --prefix=$GIT_DIR --with-curl --with-expat
+  make NO_MSGFMT=YesPlease NO_TCLTK=YesPlease NO_GETTEXT=YesPlease install
+fi
+if [ -d $GIT_DIR ]; then
+  export PATH=$GIT_DIR/bin:$PATH
+  echo "Using Git"
+  which git
+  git --version
 fi
 
 if [ ! -d $WORK_DIR/depot_tools ]; then
