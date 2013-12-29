@@ -1,6 +1,6 @@
 WORK_DIR=/home/vagrant
 
-PAGESPEED_VERSION=latest-stable
+PAGESPEED_VERSION=1.7.30.1
 
 NGINX_VERSION=1.4.4
 NGINX_DOWNLOAD=http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
@@ -77,7 +77,7 @@ if [ ! -d $WORK_DIR/mod_pagespeed ]; then
   mkdir mod_pagespeed
 fi
 cd $WORK_DIR/mod_pagespeed
-gclient config http://modpagespeed.googlecode.com/svn/branches/$PAGESPEED_VERSION/src
+gclient config http://modpagespeed.googlecode.com/svn/tags/$PAGESPEED_VERSION/src/
 gclient sync --force --jobs=1
 
 cd src
