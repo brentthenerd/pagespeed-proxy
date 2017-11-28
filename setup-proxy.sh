@@ -1,7 +1,7 @@
 WORK_DIR=/home/vagrant
 
 bash <(curl -f -L -sS https://ngxpagespeed.com/install) \
-     --nginx-version latest
+     --nginx-version latest --assume-yes
 
 
 echo "Starting Nginx..."
